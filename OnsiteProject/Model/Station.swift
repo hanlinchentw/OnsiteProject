@@ -6,28 +6,62 @@
 //
 
 import Foundation
+import CoreLocation
+
 struct Val: Codable {
     let retVal: [String: UbikeData]
 }
 struct UbikeData: Codable{
-    let sareaen: String
-//    let name: String
-//    let total: Int
-//    let available: Int
-//    let empty: Int
-//    let latitude: Double
-//    let longitude: Double
-//    let lastFreshTime: Int
+    let name: String
+    let area: String
+    let address: String
+    let totalNum: String
+    let available: String
+    let empty: String
+    let lastUpdateTime: String
+    let latitude: String
+    let longitude: String
     
-//    init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        station = try values.decode(String.self, forKey: .station)
-//        name = try values.decode(String.self, forKey: .name)
-//        total = try values.decode(Int.self, forKey: .total)
-//        available = try values.decode(Int.self, forKey: .available)
-//        empty = try values.decode(Int.self, forKey: .empty)
-//        latitude = try values.decode(Double.self, forKey: .latitude)
-//        longitude = try values.decode(Double.self, forKey: .longitude)
-//        lastFreshTime = try values.decode(Int.self, forKey: .lastFreshTime)
-//    }
+    var isLiked: Bool = false
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        name = try values.decode(String.self, forKey: .name)
+        area = try values.decode(String.self, forKey: .area)
+        address = try values.decode(String.self, forKey: .address)
+        totalNum = try values.decode(String.self, forKey: .totalNum)
+        available = try values.decode(String.self, forKey: .available)
+        empty = try values.decode(String.self, forKey: .empty)
+        lastUpdateTime = try values.decode(String.self, forKey: .lastUpdateTime)
+        latitude = try values.decode(String.self, forKey: .latitude)
+        longitude = try values.decode(String.self, forKey: .longitude)
+    }
+    
+    
+    func createCellObject() -> StationViewObject {
+        let name = self.name
+        let currentState = "可借:" + "\(self.available) / " + "可停:" + "\(self.empty)" + " (Update: " + "\(1) min)"
+        let address = self.address
+        let totalNum = "Total: " + "\(self.totalNum)"
+        let walking = "(Walking: 7 min)"
+        let lat = self.latitude.toDouble()
+        let lon = self.longitude.toDouble()
+        let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        print(location)
+        let cellViewObject = StationViewObject(name: name, currentState: currentState, address: address, totalNum: totalNum, lastUpdateTime: lastUpdateTime,location: location ,walkingTime: walking)
+        return cellViewObject
+    }
+}
+
+extension UbikeData {
+    enum CodingKeys: String, CodingKey {
+        case name = "sna"
+        case area = "sarea"
+        case address = "ar"
+        case totalNum = "tot"
+        case available = "sbi"
+        case empty = "bemp"
+        case lastUpdateTime = "mday"
+        case latitude = "lat"
+        case longitude = "lng"
+    }
 }
