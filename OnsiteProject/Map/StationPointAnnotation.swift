@@ -9,6 +9,10 @@ import UIKit
 import MapKit
 
 class StationPointAnnotation: MKPointAnnotation {
+    let viewObject: StationViewObject
     
+    init(viewObject: StationViewObject) {
+        self.viewObject = viewObject
+    }
 
 }

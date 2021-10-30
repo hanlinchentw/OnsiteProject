@@ -19,41 +19,40 @@ class APIManager {
     static let shared = APIManager()
     static let apiString = "https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json"
     
-    func getStationInfo() -> Single<Val>{
-        
-        return self.get().flatMap { data -> Single<Val> in
+    func getStationInfo() -> Observable<Val>{
+        return self.get().flatMap { data -> Observable<Val> in
             if let data = data {
                 do{
                     let result = try JSONDecoder().decode(Val.self, from: data)
-                    return Single<Val>.just(result)
+                    return Observable<Val>.just(result)
                 }catch {
-                    return Single.error(APIRequestError.decodeError)
+                    return Observable.error(APIRequestError.decodeError)
                 }
             }
-            return Single.error(APIRequestError.dataNull)
+            return Observable.error(APIRequestError.dataNull)
         }
     }
 
-    private func get() -> Single<Data?> {
-        return Single.create { event -> Disposable in
+    private func get() -> Observable<Data?> {
+        return Observable.create { event -> Disposable in
             let url = URL(string: APIManager.apiString)
             let request = URLRequest(url: url!)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if error != nil {
-                    event(.failure(APIRequestError.wrongUrlFormat))
+                    event.onError(APIRequestError.wrongUrlFormat)
                     print(error?.localizedDescription)
                 }
                 if let res = response as? HTTPURLResponse {
                     if (400...499).contains(res.statusCode){
-                        event(.failure(APIRequestError.badRequest))
+                        event.onError(APIRequestError.badRequest)
                     }else if (500...599).contains(res.statusCode){
-                        event(.failure(APIRequestError.serverError))
+                        event.onError(APIRequestError.serverError)
                     }else if (200...299).contains(res.statusCode) {
                         if let data = data,
                            let JSONString = String(data: data, encoding: String.Encoding.utf8){
                             print("JSONString = " + JSONString)
-                            event(.success(data))
-                            print("Response: ", res)
+                            event.onNext(data)
+                            event.onCompleted()
                         }
                     }
                 }

@@ -89,20 +89,34 @@
                                     <outlet property="delegate" destination="h3I-gU-O9n" id="Dl2-aP-BOJ"/>
                                 </connections>
                             </mapView>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GpL-fa-VgE">
+                                <rect key="frame" x="358" y="804" width="20" height="22"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" red="1" green="0.87773799880000003" blue="0.5447909849" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="location" catalog="system" renderingMode="original"/>
+                                </state>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Dh3-Z9-Wpe"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Dh3-Z9-Wpe" firstAttribute="bottom" secondItem="GpL-fa-VgE" secondAttribute="bottom" constant="36" id="CQM-MH-SUV"/>
                             <constraint firstItem="ESE-BN-5ma" firstAttribute="leading" secondItem="Dh3-Z9-Wpe" secondAttribute="leading" id="DeI-Sl-7D0"/>
                             <constraint firstItem="ESE-BN-5ma" firstAttribute="trailing" secondItem="Dh3-Z9-Wpe" secondAttribute="trailing" id="O24-eC-tcD"/>
                             <constraint firstItem="ESE-BN-5ma" firstAttribute="top" secondItem="Dh3-Z9-Wpe" secondAttribute="top" id="ZUk-a1-x8Q"/>
+                            <constraint firstItem="Dh3-Z9-Wpe" firstAttribute="trailing" secondItem="GpL-fa-VgE" secondAttribute="trailing" constant="36" id="dVO-yF-cm5"/>
                             <constraint firstItem="ESE-BN-5ma" firstAttribute="top" secondItem="Dh3-Z9-Wpe" secondAttribute="top" id="pwt-HE-skG"/>
                             <constraint firstAttribute="bottom" secondItem="ESE-BN-5ma" secondAttribute="bottom" id="qbH-Ee-s6U"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="UBikeTP Map" id="B0S-7x-sdq"/>
+                    <navigationItem key="navigationItem" title="UBikeTP Map" id="B0S-7x-sdq">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="3ZK-6s-3SR"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="ESE-BN-5ma" id="5Pi-0c-V1K"/>
+                        <outlet property="refreshButton" destination="3ZK-6s-3SR" id="WoD-fw-Uvx"/>
+                        <outlet property="relocateButton" destination="GpL-fa-VgE" id="C5e-lh-TH1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Sm-Ng-4Nb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -129,6 +143,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="location" catalog="system" width="128" height="121"/>
         <image name="map" catalog="system" width="128" height="110"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

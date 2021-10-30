@@ -9,9 +9,9 @@ import Foundation
 import CoreLocation
 
 struct Val: Codable {
-    let retVal: [String: UbikeData]
+    let retVal: [String: Station]
 }
-struct UbikeData: Codable{
+struct Station: Codable{
     let name: String
     let area: String
     let address: String
@@ -38,7 +38,6 @@ struct UbikeData: Codable{
     
     
     func createCellObject() -> StationViewObject {
-        let name = self.name
         let currentState = "可借:" + "\(self.available) / " + "可停:" + "\(self.empty)" + " (Update: " + "\(1) min)"
         let address = self.address
         let totalNum = "Total: " + "\(self.totalNum)"
@@ -47,12 +46,12 @@ struct UbikeData: Codable{
         let lon = self.longitude.toDouble()
         let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         print(location)
-        let cellViewObject = StationViewObject(name: name, currentState: currentState, address: address, totalNum: totalNum, lastUpdateTime: lastUpdateTime,location: location ,walkingTime: walking)
-        return cellViewObject
+        let cellViewObject = StationViewObject(name: name, area: area, currentState: currentState, address: address, totalNum: totalNum, lastUpdateTime: lastUpdateTime,location: location ,walkingTime: walking)
+        return  cellViewObject
     }
 }
 
-extension UbikeData {
+extension Station {
     enum CodingKeys: String, CodingKey {
         case name = "sna"
         case area = "sarea"

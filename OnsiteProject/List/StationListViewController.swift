@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import CoreLocation
 
 class StationListViewController: UIViewController {
     //MARK: - Properties
@@ -21,25 +22,65 @@ class StationListViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("DEBUG:App folder: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
         initView()
         get()
         askUserLocation()
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PushToMapVC" {
+            weak var controller = segue.destination as? StationMapViewController
+            controller?.viewObject = self.viewObject
+            if let sender = sender as? StationViewObject {
+                controller?.destination.accept(sender)
+            }
+        }
+    }
     //MARK: - Observe
     private func get(){
-        viewModel.getStationInfo()
-            .subscribe { [weak self] object in
+        viewModel.createStationsViewObject()
+            .subscribe (onNext: { [weak self] object in
                 self?.viewObject = object
+                self?.checkIfLiked()
                 self?.collectionView.reloadData()
-            } onFailure: { error in
+            }, onError: { error in
+                #warning("get station data error handling")
                 print(error.localizedDescription)
-            }.disposed(by: bag)
+            }, onCompleted: {
+                print("DEBUG: Completed")
+            }).disposed(by: bag)
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let controller = segue.destination as? StationMapViewController ,
-           segue.identifier == "PushToMapVC" {
-            controller.viewObject = self.viewObject
-        }
+    
+    private func add(_ stationName: String){
+        viewModel.addStationIntoFavorite(add: stationName)
+            .subscribe ( onNext: { name in
+                print("DEBUG: Add \(name)")
+            },onError: { error in
+                print(error.localizedDescription)
+            }).disposed(by: bag)
+    }
+    
+    private func checkIfLiked(){
+        viewModel.getFavoriteStation()
+            .subscribe(onNext: { [weak self] names in
+                print("DEBUG: Like \(names)")
+                guard let viewObject = self?.viewObject else { return }
+                for (index, item) in viewObject.cells.enumerated() {
+                    if names.contains(item.name) {
+                        self?.viewObject?.cells[index].isLiked = true
+                    }
+                }
+                self?.collectionView.reloadData()
+            }, onError: { error in
+                print(error.localizedDescription)
+            }).disposed(by: bag)
+    }
+    private func delete(_ stationName: String){
+        viewModel.deleteFavoriteStation(delete: stationName)
+            .subscribe (onError: { error in
+                print(error.localizedDescription)
+            }).disposed(by: bag)
+
     }
     //MARK: - UI Method
     private func initView(){
@@ -69,15 +110,30 @@ extension StationListViewController: UICollectionViewDelegate, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StationListCell", for: indexPath)
         as! StationListCell
-        cell.maxWidth = self.collectionView.bounds.width * 0.65
+        cell.maxWidth = self.collectionView.bounds.width * 0.9
         if let cellObject = self.viewObject?.cells[indexPath.row] {
             cell.configureView(cellObject)
+            let tap = UITapGestureRecognizer(target: self, action: nil)
+            cell.addGestureRecognizer(tap)
+            tap.rx.event.bind { [weak self] _  in
+                self?.performSegue(withIdentifier:  "PushToMapVC", sender: cellObject)
+            }.disposed(by: bag)
+            
+            cell.likeButton.rx.tap
+                .asObservable()
+                .bind{ [weak self] _ in
+                    if cellObject.isLiked {
+                        self?.delete(cellObject.name)
+                    }else {
+                        self?.add(cellObject.name)
+                    }
+                }.disposed(by: bag)
         }
         return cell
     }
 }
 extension StationListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 30
+        return 16
     }
 }
