@@ -17,3 +17,9 @@ extension UIView {
         return Bundle(for: T.self).loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
     }
 }
+
+extension Date{
+    static func calculateInterval(from startingDate: Date, to endingDate: Date) -> TimeInterval {
+            return startingDate.timeIntervalSinceReferenceDate - endingDate.timeIntervalSinceReferenceDate
+        }
+}

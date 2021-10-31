@@ -10,4 +10,5 @@ import Foundation
 
 class Constants{
     static let listCellIdentifier = "StationListCell"
+    static let listHeaderIdentifier = "ListHeaderView"
 }

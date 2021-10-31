@@ -38,9 +38,15 @@ struct Station: Codable{
     
     
     func createCellObject() -> StationViewObject {
-        let currentState = "可借:" + "\(self.available) / " + "可停:" + "\(self.empty)" + " (Update: " + "\(1) min)"
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        formatter.locale = Locale(identifier:"zh_tw")
+        
+        let date = formatter.date(from: lastUpdateTime) ?? Date()
+        let diffComponents = Calendar.current.dateComponents([ .minute], from: date, to: Date())
+        let currentState = "可借:" + "\(self.available) / " + "可停:" + "\(self.empty)"
         let address = self.address
-        let totalNum = "Total: " + "\(self.totalNum)"
+        let totalNum = "Update in " + "\(diffComponents.minute ?? 0) min"
         let walking = "(Walking: 7 min)"
         let lat = self.latitude.toDouble()
         let lon = self.longitude.toDouble()

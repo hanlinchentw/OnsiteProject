@@ -65,15 +65,22 @@
                             <constraint firstAttribute="bottom" secondItem="mhg-Oo-tzB" secondAttribute="bottom" id="qLV-gn-vkO"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="UBikeTP List" id="0k6-l9-hGE"/>
+                    <navigationItem key="navigationItem" title="UBikeTP List" id="0k6-l9-hGE">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="WMR-NT-t81">
+                            <imageReference key="image" image="heart.text.square.fill" catalog="system" renderingMode="original"/>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="LVt-lg-guI"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="mhg-Oo-tzB" id="l0t-k8-7Fg"/>
+                        <outlet property="filterButton" destination="WMR-NT-t81" id="i0e-6Z-Qwy"/>
                         <outlet property="mapPageTransitionButton" destination="zOB-jn-zlT" id="KBs-BU-OAY"/>
+                        <outlet property="refreshButton" destination="LVt-lg-guI" id="cGY-LR-vDo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j7Z-Z0-uMU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="689.85507246376812" y="52.901785714285715"/>
+            <point key="canvasLocation" x="654" y="53"/>
         </scene>
         <!--UBikeTP Map-->
         <scene sceneID="7hd-TA-jmP">
@@ -143,6 +150,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="heart.text.square.fill" catalog="system" width="128" height="114"/>
         <image name="location" catalog="system" width="128" height="121"/>
         <image name="map" catalog="system" width="128" height="110"/>
         <systemColor name="systemBackgroundColor">

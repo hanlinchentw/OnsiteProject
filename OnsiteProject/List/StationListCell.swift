@@ -11,12 +11,14 @@ import RxSwift
 
 class StationListCell: UICollectionViewCell {
 //MARK: - Properties
+    private let viewModel = StationListViewModel()
+    var viewObject: StationViewObject? { didSet{ configureView(self.viewObject) } }
+    
     @IBOutlet weak var maxWidthConstraint: NSLayoutConstraint!{
         didSet{
             self.maxWidthConstraint.isActive = true
         }
     }
-    
     var maxWidth: CGFloat? = nil {
         didSet {
             guard let maxWidth = maxWidth else  { return }
@@ -39,7 +41,47 @@ class StationListCell: UICollectionViewCell {
         // Initialization code
         print("Awake from nib ...")
         initView()
+        observeLikeButton()
     }
+    func observeLikeButton(){
+        likeButton.rx.tap
+            .asObservable()
+            .bind(onNext: {  [weak self] _ in
+                guard let viewObject = self?.viewObject else { return }
+                if viewObject.isLiked {
+                    self?.delete(viewObject.name)
+                }else {
+                    self?.add(viewObject.name)
+                }
+            }).disposed(by: bag)
+    }
+    private func add(_ stationName: String){
+        viewModel.addStationIntoFavorite(add: stationName)
+            .subscribe ( onNext: { [weak self] name in
+                print("DEBUG: Add \(name)")
+                self?.updateLikeState(stationName: name)
+            },onError: { error in
+                print(error.localizedDescription)
+            }).disposed(by: bag)
+    }
+    private func delete(_ stationName: String){
+        viewModel.deleteFavoriteStation(delete: stationName)
+            .subscribe (onNext: { [weak self] name in
+                print("DEBUG: Delete \(name)")
+                self?.updateLikeState(stationName: name)
+            }, onError: { error in
+                print(error.localizedDescription)
+            }).disposed(by: bag)
+        
+    }
+    private func updateLikeState(stationName: String){
+        print("Update: ", stationName)
+        guard let viewObject = self.viewObject else { return }
+        if stationName == viewObject.name {
+            self.viewObject?.isLiked.toggle()
+        }
+    }
+
 //MARK: - UI Method
     private func initView(){
         self.clipsToBounds = false
@@ -48,16 +90,9 @@ class StationListCell: UICollectionViewCell {
         self.layer.shadowOpacity = 0.2
         self.containerView.layer.cornerRadius = 12
         self.containerView.clipsToBounds = true
-        
-        self.containerView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.containerView.topAnchor.constraint(equalTo: self.topAnchor),
-            self.containerView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            self.containerView.rightAnchor.constraint(equalTo: self.rightAnchor),
-            self.containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
     }
-    func configureView(_ viewObject: StationViewObject) {
+    private func configureView(_ viewObject: StationViewObject?) {
+        guard let viewObject = viewObject else { return }
         self.nameTitle.text = viewObject.name
         self.currentStateLabel.text = viewObject.currentState
         self.addressLabel.text = viewObject.address

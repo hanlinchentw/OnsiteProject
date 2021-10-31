@@ -13,7 +13,7 @@ import RxCocoa
 
 class StationMapViewController: UIViewController {
 //MARK: - Properties
-    var viewObject: AllStationsViewObject?
+    var viewObject: [StationViewObject]?
     let viewModel = StationMapViewModel()
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var relocateButton: UIButton!
@@ -67,8 +67,7 @@ class StationMapViewController: UIViewController {
                     cellObjects.append(cellObject)
                     areas.append(data.value.area)
                 }
-                let object = AllStationsViewObject(keys: areas,cells: cellObjects)
-                self?.viewObject = object
+                self?.viewObject = cellObjects
             }, onError: { error in
                 print(error.localizedDescription)
             }, onCompleted: {
@@ -93,7 +92,7 @@ class StationMapViewController: UIViewController {
         guard let viewObject = viewObject, let mapView = mapView else { return }
         mapView.removeAnnotations(mapView.annotations)
         var annos = [StationPointAnnotation]()
-        viewObject.cells.forEach { object in
+        viewObject.forEach { object in
             let annotation = StationPointAnnotation(viewObject: object)
             annotation.title = object.name
             annotation.coordinate = object.location
@@ -157,8 +156,10 @@ extension StationMapViewController: MKMapViewDelegate {
         guard let annotation = view.annotation as? StationPointAnnotation else { return }
         let customCalloutView : StationListCell = .fromNib()
         customCalloutView.maxWidth = self.view.frame.width * 0.8
-        customCalloutView.configureView(annotation.viewObject)
-        customCalloutView.center = CGPoint(x: view.bounds.size.width / 2, y: -customCalloutView.bounds.size.height*0.52)
+        customCalloutView.viewObject = annotation.viewObject
+        customCalloutView.center = CGPoint(x: view.bounds.size.width / 2,
+                                           y: -customCalloutView.bounds.size.height*0.52)
+        customCalloutView.isUserInteractionEnabled = true
         view.addSubview(customCalloutView)
         mapView.setCenter((view.annotation?.coordinate)!, animated: true)
         view.image = UIImage(named: "btnLocationSelected")

@@ -24,24 +24,18 @@ class StationListViewModel {
             let grouping = Dictionary(grouping: cellObjects){ $0.area }
             let areas = Array(grouping.keys)
             let cells = Array(grouping.values)
-            
-            print("Grouping: ", areas, cells)
             return  AllStationsViewObject(keys: areas, cells: cells)
         }.observe(on: MainScheduler.instance)
         return viewObject
     }
-    
     func addStationIntoFavorite(add stationName: String) -> Observable<String> {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         return DBManager.shared.saveStation(stationName, in: context)
     }
-    
-    
     func getFavoriteStation() -> Observable<[String]> {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         return DBManager.shared.getStation(in: context)
     }
-    
     func deleteFavoriteStation(delete stationName: String) -> Observable<String> {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         return DBManager.shared.deleteStation(stationName, in: context)
