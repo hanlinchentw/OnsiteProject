@@ -21,7 +21,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="mhg-Oo-tzB">
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DxO-EU-Y5W">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DxO-EU-Y5W">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -50,7 +50,7 @@
                                     <imageReference key="image" image="map" catalog="system" renderingMode="original"/>
                                 </state>
                                 <connections>
-                                    <segue destination="h3I-gU-O9n" kind="push" identifier="PushToMapVC" id="lZL-cU-TNt"/>
+                                    <segue destination="h3I-gU-O9n" kind="presentation" identifier="PushToMapVC" modalPresentationStyle="fullScreen" id="lZL-cU-TNt"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -91,7 +91,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ESE-BN-5ma">
-                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <connections>
                                     <outlet property="delegate" destination="h3I-gU-O9n" id="Dl2-aP-BOJ"/>
                                 </connections>
@@ -104,25 +104,47 @@
                                     <imageReference key="image" image="location" catalog="system" renderingMode="original"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TMN-fo-x3s">
+                                <rect key="frame" x="32" y="76" width="13" height="22"/>
+                                <state key="normal">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                    <imageReference key="image" image="chevron.backward" catalog="system" renderingMode="original"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="333-Ch-2to">
+                                <rect key="frame" x="362" y="76" width="20" height="22"/>
+                                <state key="normal">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                    <imageReference key="image" image="escape" catalog="system" renderingMode="original"/>
+                                </state>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Dh3-Z9-Wpe"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="TMN-fo-x3s" firstAttribute="top" secondItem="Dh3-Z9-Wpe" secondAttribute="top" constant="32" id="68u-Hu-Q0O"/>
+                            <constraint firstItem="333-Ch-2to" firstAttribute="top" secondItem="Dh3-Z9-Wpe" secondAttribute="top" constant="32" id="8Jp-3H-LZi"/>
+                            <constraint firstItem="TMN-fo-x3s" firstAttribute="leading" secondItem="Dh3-Z9-Wpe" secondAttribute="leading" constant="32" id="9xO-zY-GU0"/>
                             <constraint firstItem="Dh3-Z9-Wpe" firstAttribute="bottom" secondItem="GpL-fa-VgE" secondAttribute="bottom" constant="36" id="CQM-MH-SUV"/>
                             <constraint firstItem="ESE-BN-5ma" firstAttribute="leading" secondItem="Dh3-Z9-Wpe" secondAttribute="leading" id="DeI-Sl-7D0"/>
                             <constraint firstItem="ESE-BN-5ma" firstAttribute="trailing" secondItem="Dh3-Z9-Wpe" secondAttribute="trailing" id="O24-eC-tcD"/>
-                            <constraint firstItem="ESE-BN-5ma" firstAttribute="top" secondItem="Dh3-Z9-Wpe" secondAttribute="top" id="ZUk-a1-x8Q"/>
+                            <constraint firstItem="ESE-BN-5ma" firstAttribute="top" secondItem="Fia-kJ-Gsf" secondAttribute="top" id="ZUk-a1-x8Q"/>
                             <constraint firstItem="Dh3-Z9-Wpe" firstAttribute="trailing" secondItem="GpL-fa-VgE" secondAttribute="trailing" constant="36" id="dVO-yF-cm5"/>
-                            <constraint firstItem="ESE-BN-5ma" firstAttribute="top" secondItem="Dh3-Z9-Wpe" secondAttribute="top" id="pwt-HE-skG"/>
+                            <constraint firstItem="ESE-BN-5ma" firstAttribute="top" secondItem="Fia-kJ-Gsf" secondAttribute="top" id="pwt-HE-skG"/>
                             <constraint firstAttribute="bottom" secondItem="ESE-BN-5ma" secondAttribute="bottom" id="qbH-Ee-s6U"/>
+                            <constraint firstItem="Dh3-Z9-Wpe" firstAttribute="trailing" secondItem="333-Ch-2to" secondAttribute="trailing" constant="32" id="vyf-jz-Rfn"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="UBikeTP Map" id="B0S-7x-sdq">
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="3ZK-6s-3SR"/>
+                        <connections>
+                            <outlet property="titleView" destination="Fia-kJ-Gsf" id="PVu-om-po6"/>
+                        </connections>
                     </navigationItem>
                     <connections>
+                        <outlet property="backButton" destination="TMN-fo-x3s" id="AN6-l6-OSB"/>
                         <outlet property="mapView" destination="ESE-BN-5ma" id="5Pi-0c-V1K"/>
-                        <outlet property="refreshButton" destination="3ZK-6s-3SR" id="WoD-fw-Uvx"/>
+                        <outlet property="refreshButton" destination="333-Ch-2to" id="WQC-YY-Zmr"/>
                         <outlet property="relocateButton" destination="GpL-fa-VgE" id="C5e-lh-TH1"/>
                     </connections>
                 </viewController>
@@ -150,9 +172,14 @@
         </scene>
     </scenes>
     <resources>
+        <image name="chevron.backward" catalog="system" width="96" height="128"/>
+        <image name="escape" catalog="system" width="128" height="121"/>
         <image name="heart.text.square.fill" catalog="system" width="128" height="114"/>
         <image name="location" catalog="system" width="128" height="121"/>
         <image name="map" catalog="system" width="128" height="110"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

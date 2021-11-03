@@ -9,6 +9,7 @@ import Foundation
 import RxSwift
 
 enum APIRequestError: Error {
+    case noInternetError
     case wrongUrlFormat
     case badRequest
     case serverError
@@ -38,6 +39,7 @@ class APIManager {
             let url = URL(string: APIManager.apiString)
             let request = URLRequest(url: url!)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if !NetworkMonitor.shared.isConnected { event.onError(APIRequestError.noInternetError) }
                 if error != nil {
                     event.onError(APIRequestError.wrongUrlFormat)
                     print(error?.localizedDescription)

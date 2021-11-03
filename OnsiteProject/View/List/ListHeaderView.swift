@@ -18,5 +18,4 @@ class ListHeaderView: UICollectionReusableView {
     func configureTitle(_ area: String) {
         titleLabel.text = area
     }
-    
 }

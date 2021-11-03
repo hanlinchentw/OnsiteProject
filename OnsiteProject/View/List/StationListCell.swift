@@ -11,7 +11,7 @@ import RxSwift
 
 class StationListCell: UICollectionViewCell {
 //MARK: - Properties
-    private let viewModel = StationListViewModel()
+    private let viewModel = StationViewModel()
     var viewObject: StationViewObject? { didSet{ configureView(self.viewObject) } }
     
     @IBOutlet weak var maxWidthConstraint: NSLayoutConstraint!{
@@ -32,56 +32,19 @@ class StationListCell: UICollectionViewCell {
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var totalNumLabel: UILabel!
     @IBOutlet weak var likeButton: UIButton!
-//    @IBOutlet weak var walkingTimeLabel: UILabel!
+    @IBOutlet weak var walkingTimeLabel: UILabel!
     
-    private var bag = DisposeBag()
+    var bag = DisposeBag()
 //MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         print("Awake from nib ...")
         initView()
-        observeLikeButton()
     }
-    func observeLikeButton(){
-        likeButton.rx.tap
-            .asObservable()
-            .bind(onNext: {  [weak self] _ in
-                guard let viewObject = self?.viewObject else { return }
-                if viewObject.isLiked {
-                    self?.delete(viewObject.name)
-                }else {
-                    self?.add(viewObject.name)
-                }
-            }).disposed(by: bag)
+    override func prepareForReuse() {
+        self.bag = DisposeBag()
     }
-    private func add(_ stationName: String){
-        viewModel.addStationIntoFavorite(add: stationName)
-            .subscribe ( onNext: { [weak self] name in
-                print("DEBUG: Add \(name)")
-                self?.updateLikeState(stationName: name)
-            },onError: { error in
-                print(error.localizedDescription)
-            }).disposed(by: bag)
-    }
-    private func delete(_ stationName: String){
-        viewModel.deleteFavoriteStation(delete: stationName)
-            .subscribe (onNext: { [weak self] name in
-                print("DEBUG: Delete \(name)")
-                self?.updateLikeState(stationName: name)
-            }, onError: { error in
-                print(error.localizedDescription)
-            }).disposed(by: bag)
-        
-    }
-    private func updateLikeState(stationName: String){
-        print("Update: ", stationName)
-        guard let viewObject = self.viewObject else { return }
-        if stationName == viewObject.name {
-            self.viewObject?.isLiked.toggle()
-        }
-    }
-
 //MARK: - UI Method
     private func initView(){
         self.clipsToBounds = false
@@ -96,9 +59,18 @@ class StationListCell: UICollectionViewCell {
         self.nameTitle.text = viewObject.name
         self.currentStateLabel.text = viewObject.currentState
         self.addressLabel.text = viewObject.address
-//        self.walkingTimeLabel.text = viewObject.walkingTime
+        self.walkingTimeLabel.text = viewObject.walkingTime
         self.totalNumLabel.text = viewObject.totalNum
         let likeButtonImage: UIImage? = viewObject.isLiked ? UIImage(named: "icnHeart") : UIImage(named: "icnUnselectHeart")
         self.likeButton.setImage(likeButtonImage?.withRenderingMode(.alwaysOriginal), for: .normal)
+    }
+}
+extension StationListCell {
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let size = contentView.systemLayoutSizeFitting(layoutAttributes.size)
+        var frame = layoutAttributes.frame
+        frame.size.height = ceil(size.height)
+        layoutAttributes.frame = frame
+        return layoutAttributes
     }
 }

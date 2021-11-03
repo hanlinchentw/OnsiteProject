@@ -24,20 +24,26 @@
                                 <rect key="frame" x="12" y="12" width="192" height="192"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="新店區公所站" textAlignment="justified" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mix-AO-zEh">
-                                        <rect key="frame" x="0.0" y="0.0" width="98" height="45.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="98" height="32.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="black" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="可借: 30 / 可停: 70" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rZg-EJ-jL6">
-                                        <rect key="frame" x="0.0" y="57.5" width="133.5" height="45.5"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="133.5" height="32.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="新北市新店區北新路555號" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pef-0J-D8B">
-                                        <rect key="frame" x="0.0" y="115" width="192" height="77"/>
+                                        <rect key="frame" x="0.0" y="89" width="192" height="32.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="走路: 10 mins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1oe-W3-lcP">
+                                        <rect key="frame" x="0.0" y="133.5" width="102" height="58.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -49,9 +55,9 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k0l-sh-2SE">
-                                <rect key="frame" x="287" y="164" width="51" height="40"/>
-                                <state key="normal" title="b" image="icnUnselectHeart"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k0l-sh-2SE">
+                                <rect key="frame" x="298" y="164" width="40" height="40"/>
+                                <state key="normal" image="icnUnselectHeart"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -86,6 +92,7 @@
                 <outlet property="maxWidthConstraint" destination="JDg-IY-duy" id="jX0-Ya-72S"/>
                 <outlet property="nameTitle" destination="Mix-AO-zEh" id="2Zh-T4-GcD"/>
                 <outlet property="totalNumLabel" destination="wga-w2-hNT" id="gcd-P1-O2w"/>
+                <outlet property="walkingTimeLabel" destination="1oe-W3-lcP" id="Dap-NG-vzk"/>
             </connections>
             <point key="canvasLocation" x="250.72463768115944" y="-8.0357142857142847"/>
         </collectionViewCell>

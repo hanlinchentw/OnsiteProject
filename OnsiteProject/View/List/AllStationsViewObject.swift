@@ -18,9 +18,9 @@ struct StationViewObject {
     let area: String
     let currentState: String // 可借：30 / 可停：70
     let address: String
-    let totalNum: String
-    let lastUpdateTime: String
+    let totalNum: String // Total: 100
+    let lastUpdateTime: String // Update:
     let location: CLLocationCoordinate2D
-    let walkingTime: String
+    var walkingTime: String
     var isLiked: Bool = false
 }

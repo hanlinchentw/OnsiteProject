@@ -36,23 +36,16 @@ struct Station: Codable{
         longitude = try values.decode(String.self, forKey: .longitude)
     }
     
-    
-    func createCellObject() -> StationViewObject {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMddHHmmss"
-        formatter.locale = Locale(identifier:"zh_tw")
-        
-        let date = formatter.date(from: lastUpdateTime) ?? Date()
-        let diffComponents = Calendar.current.dateComponents([ .minute], from: date, to: Date())
+    func createStationViewObject() -> StationViewObject {
         let currentState = "可借:" + "\(self.available) / " + "可停:" + "\(self.empty)"
         let address = self.address
-        let totalNum = "Update in " + "\(diffComponents.minute ?? 0) min"
-        let walking = "(Walking: 7 min)"
+        let totalNum = "Update: " + Date().convertDateFormater(lastUpdateTime)
         let lat = self.latitude.toDouble()
         let lon = self.longitude.toDouble()
         let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        print(location)
-        let cellViewObject = StationViewObject(name: name, area: area, currentState: currentState, address: address, totalNum: totalNum, lastUpdateTime: lastUpdateTime,location: location ,walkingTime: walking)
+
+        let walkingTime: String = LocationHandler.shared.calculateTravelingTime(to: location)
+        let cellViewObject = StationViewObject(name: name, area: area, currentState: currentState, address: address, totalNum: totalNum, lastUpdateTime: lastUpdateTime, location: location, walkingTime: walkingTime)
         return  cellViewObject
     }
 }

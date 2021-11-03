@@ -9,26 +9,24 @@ import Foundation
 import RxSwift
 import UIKit
 
-class StationListViewModel {
+class StationViewModel {
     
     var disposeBag: DisposeBag = .init()
     
-    func createStationsViewObject() -> Observable<AllStationsViewObject> {
+    func getAllStationsViewObject() -> Observable<AllStationsViewObject> {
         let data = APIManager.shared.getStationInfo()
         let viewObject = data.map { val -> AllStationsViewObject in
             var cellObjects = [StationViewObject]()
             val.retVal.forEach { key, data in
-                let cellObject = data.createCellObject()
+                let cellObject = data.createStationViewObject()
                 cellObjects.append(cellObject)
             }
-            let grouping = Dictionary(grouping: cellObjects){ $0.area }
-            let areas = Array(grouping.keys)
-            let cells = Array(grouping.values)
-            return  AllStationsViewObject(keys: areas, cells: cells)
+            let (keys, cells) = Array<Any>().groupStationByArea(stations: cellObjects)
+            return  AllStationsViewObject(keys: keys, cells: cells)
         }.observe(on: MainScheduler.instance)
         return viewObject
     }
-    func addStationIntoFavorite(add stationName: String) -> Observable<String> {
+    func addFavoriteStation(add stationName: String) -> Observable<String> {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         return DBManager.shared.saveStation(stationName, in: context)
     }
