@@ -20,6 +20,7 @@ extension Array {
     }
 }
 extension Double {
+    
     func rounded(to places: Int) -> Double {
         return (self * pow(10, Double(places))).rounded() / pow(10, Double(places))
     }

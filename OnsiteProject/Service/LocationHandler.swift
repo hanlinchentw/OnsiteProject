@@ -32,19 +32,34 @@ class LocationHandler : NSObject {
         request.transportType = .walking
         request.requestsAlternateRoutes = true
         let directions = MKDirections(request: request)
-        directions.calculate {(response, error) in
-            guard let response = response else {
-                if let error = error as? MKError {
-                    print("Error: \(error)")
+        let group = DispatchGroup()
+        group.enter()
+        DispatchQueue.main.async {
+            directions.calculate {(response, error) in
+                guard let response = response else {
+                    if let error = error as? MKError {
+                        print("Error: \(error)")
+                    }
+                    group.leave()
+                    return
                 }
-                return
-            }
-            if response.routes.count > 0 {
-                let route = response.routes[0]
-                print("Walking time:", userLocation," to ", destination, "\(route.expectedTravelTime/60)")
-                expectTime = "\(route.expectedTravelTime/60)"
+                if response.routes.count > 0 {
+                    let route = response.routes[0]
+                    let (hour, min, second) = self.secondsToHoursMinutesSeconds(seconds: Int(route.expectedTravelTime))
+                    if let second = second {
+                        expectTime = "\(second)s"
+                        if let min = min {
+                            expectTime = "\(min)min \(second)s"
+                            if let hour = hour {
+                                expectTime = "Walking: \(hour) h \(min) min \(second) s"
+                            }
+                        }
+                    }
+                    group.leave()
+                }
             }
         }
+        group.wait()
         return expectTime
     }
 }
@@ -52,5 +67,11 @@ class LocationHandler : NSObject {
 extension LocationHandler : CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         
+    }
+    func secondsToHoursMinutesSeconds (seconds : Int) -> (Int?, Int?, Int?) {
+        let hour = seconds / 3600 == 0 ? nil : seconds / 3600
+        let min =  (seconds % 3600) / 60 == 0 ? nil : (seconds % 3600) / 60
+        let second = (seconds % 3600) % 60 == 0 ? nil : (seconds % 3600) % 60
+      return (hour, min, second)
     }
 }

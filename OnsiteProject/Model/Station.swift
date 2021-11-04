@@ -43,9 +43,16 @@ struct Station: Codable{
         let lat = self.latitude.toDouble()
         let lon = self.longitude.toDouble()
         let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-
-        let walkingTime: String = LocationHandler.shared.calculateTravelingTime(to: location)
-        let cellViewObject = StationViewObject(name: name, area: area, currentState: currentState, address: address, totalNum: totalNum, lastUpdateTime: lastUpdateTime, location: location, walkingTime: walkingTime)
+        
+        let walkingTime = LocationHandler.shared.calculateTravelingTime(to: location)
+        print("Walking time to ", location, "\(walkingTime)")
+        let cellViewObject = StationViewObject(name: name,
+                                               area: area,
+                                               currentState: currentState,
+                                               address: address,
+                                               totalNum: totalNum,
+                                               lastUpdateTime: lastUpdateTime, location: location,
+                                               walkingTime: walkingTime)
         return  cellViewObject
     }
 }

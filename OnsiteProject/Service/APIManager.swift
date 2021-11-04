@@ -42,7 +42,6 @@ class APIManager {
                 if !NetworkMonitor.shared.isConnected { event.onError(APIRequestError.noInternetError) }
                 if error != nil {
                     event.onError(APIRequestError.wrongUrlFormat)
-                    print(error?.localizedDescription)
                 }
                 if let res = response as? HTTPURLResponse {
                     if (400...499).contains(res.statusCode){

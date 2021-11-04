@@ -28,14 +28,14 @@ class StationViewModel {
     }
     func addFavoriteStation(add stationName: String) -> Observable<String> {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        return DBManager.shared.saveStation(stationName, in: context)
+        return DBManager.shared.saveStation(stationName, in: context).observe(on: MainScheduler.instance)
     }
     func getFavoriteStation() -> Observable<[String]> {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        return DBManager.shared.getStation(in: context)
+        return DBManager.shared.getStation(in: context).observe(on: MainScheduler.instance)
     }
     func deleteFavoriteStation(delete stationName: String) -> Observable<String> {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        return DBManager.shared.deleteStation(stationName, in: context)
+        return DBManager.shared.deleteStation(stationName, in: context).observe(on: MainScheduler.instance)
     }
 }
